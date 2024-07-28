@@ -44,8 +44,6 @@ public class LootExplorer implements ModInitializer {
 		ModItemGroups.registerItemGroups();
 		KeyboardHandler.registerKeyboard();
 
-
-
 		LOGGER.info("Initialized Mod: {} v{}", MOD_NAME, MOD_VERSION);
 	}
 

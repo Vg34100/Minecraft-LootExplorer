@@ -3,15 +3,16 @@
 	"id": "lootexplorer",
 	"version": "${version}",
 	"name": "Loot Explorer",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Loading containers with Loot Tables into the creative inventory",
 	"authors": [
-		"Me!"
+		"VgLevelUp"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Vg34100/Minecraft-LootExplorer",
+		"issues": "https://github.com/Vg34100/Minecraft-LootExplorer/issues"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/lootexplorer/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -32,6 +33,15 @@
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
+		"modmenu": "*"
+	},
+	"custom": {
+		"modmenu" : {
+			"links": {
+				"modmenu.modrinth": "https://modrinth.com/mod/lootexplorer",
+				"modmenu.discord": "https://discord.gg/Xfcysgn3jU",
+				"modmenu.donate": "https://buymeacoffee.com/vglevelup"
+			}
+		}
 	}
 }

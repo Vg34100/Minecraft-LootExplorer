@@ -14,18 +14,24 @@ public class KeyboardHandler {
     private static KeyBinding copyLootTableKey;
 
     public static void registerKeyboard() {
+        // Register the keybinding
         copyLootTableKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.lootexplorer.copy_loot_table",
-                GLFW.GLFW_KEY_J,
+                GLFW.GLFW_KEY_J, // Keybinding set to 'J'
                 "category.lootexplorer"
         ));
 
+        // Check every click if the keybind is pressed
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (copyLootTableKey.wasPressed()) {
                 handleCopyLootTable(client);
             }
         });
     }
+
+    /**
+     * Copy's the lore of the player's currently held item.
+     */
     private static void handleCopyLootTable(MinecraftClient client) {
         if (client.player != null && client.player.getMainHandStack() != null) {
             // Get the item in the player's main hand

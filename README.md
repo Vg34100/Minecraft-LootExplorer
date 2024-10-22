@@ -8,7 +8,7 @@ The **Loot Explorer** Mod for Minecraft helps the Minecraft content developer by
 
 Works in Minecraft 1.21
 
-*Requires FabricAPI*
+*Requires ArchitecturyAPI*
 
 ---------------	
 
@@ -31,7 +31,7 @@ Works in Minecraft 1.21
 4. Start Minecraft using the Fabric profile.
 
 ## Dependencies
-- Required: FabricAPI
+- Required: ArchitecturyAPI
 
 ---------------	
 

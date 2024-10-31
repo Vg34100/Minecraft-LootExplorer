@@ -3,7 +3,9 @@ package net.vg.lootexplorer.inventory;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
@@ -56,16 +58,23 @@ public class LootPreviewScreen extends AbstractContainerScreen<LootPreviewMenu> 
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(CoreShaders.RENDERTYPE_GUI);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, CONTAINER_BACKGROUND);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        guiGraphics.blit(CONTAINER_BACKGROUND, i, j, 0, 0, this.imageWidth, this.imageHeight);
+//        guiGraphics.blit(CONTAINER_BACKGROUND, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        guiGraphics.blit(RenderType::guiTextured, CONTAINER_BACKGROUND, i, j, 0f, 0f, this.imageWidth, this.imageHeight, 256, 256);
 
         if (this.canScroll) {
             int scrollbarPos = (int)(137 * this.scrollOffs); // Adjusted for 7 rows
-            guiGraphics.blit(CONTAINER_BACKGROUND, i + 175, j + 18 + scrollbarPos, 232, 0, 12, 15);
+//            guiGraphics.blit(CONTAINER_BACKGROUND, i + 175, j + 18 + scrollbarPos, 232, 0, 12, 15);
+            guiGraphics.blit(RenderType::guiTextured, CONTAINER_BACKGROUND,
+                    i + 175, j + 18 + scrollbarPos,  // destination x,y
+                    232f, 0f,                        // source u,v
+                    12, 15,                          // width, height
+                    256, 256);                       // texture dimensions
         }
 
         int itemIndex = this.canScroll ? (int)(this.scrollOffs * (float)(Math.max(0, items.size() - (ROWS * COLS)) / COLS) + 0.5F) * COLS : 0;

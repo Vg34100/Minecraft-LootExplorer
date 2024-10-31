@@ -184,8 +184,8 @@ public class LootHandler extends SimplePreparableReloadListener<Void> {
         }
 
         String itemName = entry.get("name").getAsString();
-        Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemName));
-
+        Item item = BuiltInRegistries.ITEM.getOptional(ResourceLocation.parse(itemName))
+                .orElse(null);
         if (item != null) {
             ItemStack stack = new ItemStack(item);
             List<Component> lore = new ArrayList<>();
@@ -239,12 +239,19 @@ public class LootHandler extends SimplePreparableReloadListener<Void> {
             case "minecraft:set_components":
 
                 ResourceLocation functionId = ResourceLocation.parse(functionType);
-                LootItemFunctionType<?> a = BuiltInRegistries.LOOT_FUNCTION_TYPE.get(functionId);
+//                LootItemFunctionType<?> a = BuiltInRegistries.LOOT_FUNCTION_TYPE.get(functionId);
+                Optional<LootItemFunctionType<?>> functionTypeOptional = BuiltInRegistries.LOOT_FUNCTION_TYPE.getOptional(functionId);
 
-                if (functionType == null) {
+//                if (functionType == null) {
+//                    throw new IllegalArgumentException("Unknown loot function type: " + functionId);
+//                }
+//                stack.applyComponents(((SetComponentsFunctionMixin)a).getComponents());
+
+                if (functionTypeOptional.isEmpty()) {
                     throw new IllegalArgumentException("Unknown loot function type: " + functionId);
                 }
-//                stack.applyComponents(((SetComponentsFunctionMixin)a).getComponents());
+
+//                LootItemFunctionType<?> functionTypetyoe = functionTypeOptional.get();
 
                 break;
             case "minecraft:set_count":
@@ -375,7 +382,10 @@ public class LootHandler extends SimplePreparableReloadListener<Void> {
         System.out.println("enchantBook called with eBook: " + eBook + ", resourceLocation: " + resourceLocation + ", enchantLevel: " + enchantLevel);
 
         RegistryAccess registryAccess = level.registryAccess();
-        Optional<Holder.Reference<Enchantment>> reference = registryAccess.registryOrThrow(Registries.ENCHANTMENT).getHolder(resourceLocation);
+//        Optional<Holder.Reference<Enchantment>> reference = registryAccess.registryOrThrow(Registries.ENCHANTMENT).getHolder(resourceLocation);
+        Optional<Holder.Reference<Enchantment>> reference = registryAccess.lookupOrThrow(Registries.ENCHANTMENT).get(resourceLocation);
+
+
 
         if (reference.isEmpty()) {
             Constants.LOGGER.error("Reference was found Empty");
@@ -389,8 +399,10 @@ public class LootHandler extends SimplePreparableReloadListener<Void> {
             return eBook;
         }
 
-        HolderGetter.Provider provider = registryAccess.asGetterLookup();
-        Enchantment enchantment = provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(key.get()).value();
+//        HolderGetter.Provider provider = registryAccess.asGetterLookup();
+//        Enchantment enchantment = provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(key.get()).value();
+        Enchantment enchantment = registryAccess.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(key.get()).value();
+
 
         Holder<Enchantment> entry = Holder.direct(enchantment);
 
@@ -493,7 +505,8 @@ public class LootHandler extends SimplePreparableReloadListener<Void> {
             chestItem.set(DataComponents.LORE, loreComponent);
 
             // Set the custom name for the chest item
-            String translationKey = chestItem.getDescriptionId();
+//            String translationKey = chestItem.getDescriptionId();
+            String translationKey = chestItem.getItemName().getString();
             Component itemTypeName = Component.translatable(translationKey);
             Component customName = Component.literal(itemTypeName.getString() + " (#" + String.format("%04d", counter) + ")");
             chestItem.set(DataComponents.ITEM_NAME, customName);
@@ -543,7 +556,8 @@ public class LootHandler extends SimplePreparableReloadListener<Void> {
             archaeologyItem.set(DataComponents.LORE, loreComponent);
 
             // Set custom name
-            String translationKey = archaeologyItem.getDescriptionId();
+//            String translationKey = archaeologyItem.getDescriptionId();
+            String translationKey = archaeologyItem.getItemName().getString();
             Component itemTypeName = Component.translatable(translationKey);
             Component customName = Component.literal(itemTypeName.getString() + " (#" + String.format("%04d", counter) + ")");
             archaeologyItem.set(DataComponents.ITEM_NAME, customName);
